@@ -1,0 +1,11 @@
+---
+- hosts: machine2
+  become: yes
+  tasks:
+    - name: create user
+      user: name=excuser groups=sudo password='$6$j0rlOeG0$iKfoSVskuZub0nF4WeeV/i5R6rcsMLxXiqLkwXSGYixnEDhUDuN8kh7QwgCDM9bDbJUITy.ozJpXztjjvVgdk1' state=present
+    - name: cron
+      cron: name=log minute=*/5 user=excuser job='echo excuser >> /var/log/messages' 
+      become_user: excuser
+    - name: create file
+      file: path=/home/excuser/create.txt state=touch
